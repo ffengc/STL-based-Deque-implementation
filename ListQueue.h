@@ -2,17 +2,13 @@
 
 
 
-/*希望老师在批改之前可以看一下代码的文档 -- README.md -- 谢谢！*/
-/*代码已按照要求实现了题目中所有功能，详情请见代码的文档*/
-
-
 #include"MyVector.h"
 #include"MyList.h"
 #include<initializer_list>
 #include<vector>
 #include<algorithm>
 
-//声明一下
+//锟斤拷锟斤拷一锟斤拷
 template<class Type, class Cmp>
 struct ListQueue;
 
@@ -20,8 +16,8 @@ template<class Type, class Ref, class Ptr, class Cmp>
 struct __list_queue_iterator
 {
 public:
-	//为了通过STL其它组件的类型检查 -- 加上这几句话
-	//这样我们就可以把ListQueue也用在stl的部分其它算法上了
+	//为锟斤拷通锟斤拷STL锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷图锟斤拷 -- 锟斤拷锟斤拷锟解几锟戒话
+	//锟斤拷锟斤拷锟斤拷锟角就匡拷锟皆帮拷ListQueue也锟斤拷锟斤拷stl锟侥诧拷锟斤拷锟斤拷锟斤拷锟姐法锟斤拷锟斤拷
 	typedef bidirectional_iterator_tag iterator_category;
 	typedef Type value_type;
 	typedef Ptr pointer;
@@ -34,8 +30,8 @@ public:
 	__list_queue_iterator(ListQueue<Type, Cmp>* ptr, size_t pos)
 		:__ptr(ptr), __pos(pos) {}
 public:
-	//控制核心迭代器行为
-	//重载!=/==
+	//锟斤拷锟狡猴拷锟侥碉拷锟斤拷锟斤拷锟斤拷为
+	//锟斤拷锟斤拷!=/==
 	bool operator!=(const __list_queue_iterator& lqit)
 	{
 		return __ptr != lqit.__ptr || __pos != lqit.__pos;
@@ -44,7 +40,7 @@ public:
 	{
 		return __ptr == lqit.__ptr && __pos == lqit.__pos;
 	}
-	//重载解引用
+	//锟斤拷锟截斤拷锟斤拷锟斤拷
 	Ref operator*()
 	{
 		return __ptr->operator[](__pos);
@@ -53,7 +49,7 @@ public:
 	{
 		return &(operator*());
 	}
-	//重载前置++/--
+	//锟斤拷锟斤拷前锟斤拷++/--
 	__list_queue_iterator& operator++()
 	{
 		__pos++;
@@ -64,22 +60,22 @@ public:
 		__pos--;
 		return *this;
 	}
-	//重载后置++/--
+	//锟斤拷锟截猴拷锟斤拷++/--
 	__list_queue_iterator operator++(int)
 	{
-		//先保存一下之前的值
+		//锟饺憋拷锟斤拷一锟斤拷之前锟斤拷值
 		__list_queue_iterator tmp(*this);
 		__pos++;
 		return tmp;
 	}
 	__list_queue_iterator operator--(int)
 	{
-		//先保存一下之前的值
+		//锟饺憋拷锟斤拷一锟斤拷之前锟斤拷值
 		__list_queue_iterator tmp(*this);
 		__pos--;
 		return tmp;
 	}
-	//重载+/-
+	//锟斤拷锟斤拷+/-
 	__list_queue_iterator operator+(size_t n)
 	{
 		__list_queue_iterator tmp(*this);
@@ -95,8 +91,8 @@ public:
 };
 
 
-//封装ListQueue类
-#define VECTOR_MAX_CAPACITY 3 //规定每个vector只能存 VECTOR_MAX_CAPACITY 个元素
+//锟斤拷装ListQueue锟斤拷
+#define VECTOR_MAX_CAPACITY 3 //锟芥定每锟斤拷vector只锟杰达拷 VECTOR_MAX_CAPACITY 锟斤拷元锟斤拷
 template<class Type = int, class Cmp = less<Type>>
 struct ListQueue
 {
@@ -105,7 +101,7 @@ private:
 	size_t __nodes_count = 0;
 	size_t __size = 0;
 public:
-	//定义迭代器
+	//锟斤拷锟斤拷锟斤拷锟斤拷锟?
 	typedef __list_queue_iterator<Type, Type&, Type*, Cmp> iterator;
 	typedef __list_queue_iterator<Type, const Type&, const Type*, Cmp> const_iterator;
 	iterator begin()
@@ -125,16 +121,16 @@ public:
 		return const_iterator(this, __size);
 	}
 public:
-	ListQueue() = default;//自定义类型会去调用自己的构造函数，不用我们自己定义
+	ListQueue() = default;//锟皆讹拷锟斤拷锟斤拷锟酵伙拷去锟斤拷锟斤拷锟皆硷拷锟侥癸拷锟届函锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟皆硷拷锟斤拷锟斤拷
 	ListQueue(const ListQueue& lq)
 	{
 		__nodes_count = lq.__nodes_count;
 		__size = lq.__size;
 		__inner_list = lq.__inner_list;
 	}
-	~ListQueue() = default;//自定义类型会去调用自己的析构函数，不用我们自己定义
+	~ListQueue() = default;//锟皆讹拷锟斤拷锟斤拷锟酵伙拷去锟斤拷锟斤拷锟皆硷拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟皆硷拷锟斤拷锟斤拷
 public:
-	//支持初始化列表类型的构造
+	//支锟街筹拷始锟斤拷锟叫憋拷锟斤拷锟酵的癸拷锟斤拷
 	ListQueue(const initializer_list<Type>& list)
 	{
 		for (const auto& e : list)
@@ -142,7 +138,7 @@ public:
 			this->push_back(e);
 		}
 	}
-	//支持迭代器区间的构造
+	//支锟街碉拷锟斤拷锟斤拷锟斤拷锟斤拷墓锟斤拷锟?
 	template<class InputIterator>
 	ListQueue(InputIterator begin, InputIterator end)
 	{
@@ -153,15 +149,15 @@ public:
 		}
 	}
 public:
-	//尾插
+	//尾锟斤拷
 	void push_back(const Type& x)
 	{
 		if (__nodes_count == 0 || __inner_list[__nodes_count - 1].size() == VECTOR_MAX_CAPACITY)
 		{
-			//需要多插入一个节点的情况 -- 一开始没有节点/最后一个节点的vector满了
+			//锟斤拷要锟斤拷锟斤拷锟揭伙拷锟斤拷诘锟斤拷锟斤拷锟? -- 一锟斤拷始没锟叫节碉拷/锟斤拷锟揭伙拷锟斤拷诘锟斤拷vector锟斤拷锟斤拷
 			__nodes_count++;
 			__inner_list.push_back(MyVector<Type>());
-			//__inner_list[__nodes_count - 1];//这个是最后一个节点
+			//__inner_list[__nodes_count - 1];//锟斤拷锟斤拷锟斤拷锟斤拷一锟斤拷锟节碉拷
 			__inner_list[__nodes_count - 1].push_back(x);
 			__size++;
 		}
@@ -176,21 +172,21 @@ public:
 	{
 		assert(__nodes_count);
 		assert(__size);
-		assert(__inner_list[__nodes_count - 1].size() != 0);//不可能出现空节点的情况
+		assert(__inner_list[__nodes_count - 1].size() != 0);//锟斤拷锟斤拷锟杰筹拷锟街空节碉拷锟斤拷锟斤拷
 		__size--;
-		__inner_list[__nodes_count - 1].pop_back();//最后一个vector作pop
-		//做完pop之后可能需要删除节点
+		__inner_list[__nodes_count - 1].pop_back();//锟斤拷锟揭伙拷锟絭ector锟斤拷pop
+		//锟斤拷锟斤拷pop之锟斤拷锟斤拷锟斤拷锟揭撅拷锟斤拷诘锟?
 		if (__inner_list[__nodes_count - 1].size() == 0)
 		{
-			//此时需要删除链表最后一个节点
+			//锟斤拷时锟斤拷要删锟斤拷锟斤拷锟斤拷锟斤拷锟揭伙拷锟斤拷诘锟?
 			__inner_list.pop_back();
 			__nodes_count--;
 		}
 	}
-	//头插
+	//头锟斤拷
 	void push_front(const Type& x)
 	{
-		//复用insert
+		//锟斤拷锟斤拷insert
 		this->insert(0, x);
 	}
 	//头删
@@ -198,7 +194,7 @@ public:
 	{
 		this->erase(0);
 	}
-	//任意位置插入
+	//锟斤拷锟斤拷位锟矫诧拷锟斤拷
 	void insert(size_t pos, const Type& x)
 	{
 		if (pos == __size)
@@ -207,8 +203,8 @@ public:
 			return;
 		}
 		assert(pos >= 0 && pos < __size);
-		//在下标为pos的元素之前插入
-		//先找到pos是属于哪一个vector的
+		//锟斤拷锟铰憋拷为pos锟斤拷元锟斤拷之前锟斤拷锟斤拷
+		//锟斤拷锟揭碉拷pos锟斤拷锟斤拷锟斤拷锟斤拷一锟斤拷vector锟斤拷
 		size_t cur_sum = 0;
 		size_t i = 0;
 		for (i = 0; i < __inner_list.size(); i++)
@@ -216,19 +212,19 @@ public:
 			if (cur_sum + __inner_list[i].size() > pos)break;
 			cur_sum += __inner_list[i].size();
 		}
-		//此时的i就是所找的要插入的vector的位置
+		//锟斤拷时锟斤拷i锟斤拷锟斤拷锟斤拷锟揭碉拷要锟斤拷锟斤拷锟絭ector锟斤拷位锟斤拷
 		if (__inner_list[i].size() == VECTOR_MAX_CAPACITY)
 		{
-			//此时要多插入一个节点(情况较复杂)
-			size_t res_idx = pos - cur_sum;//剩下的下标
+			//锟斤拷时要锟斤拷锟斤拷锟揭伙拷锟斤拷诘锟?(锟斤拷锟斤拷细锟斤拷锟?)
+			size_t res_idx = pos - cur_sum;//剩锟铰碉拷锟铰憋拷
 			__inner_list[i].insert(__inner_list[i].begin() + res_idx, x);
 			__size++;
-			//此时，位置i下的vector应该已经超过限定容量了
-			//如果i位置后面的vector满了 -- 开辟新节点，如果没满，插入到后面的vector中去
-			//如果i位置后面没有vector了 -- 开辟新节点
+			//锟斤拷时锟斤拷位锟斤拷i锟铰碉拷vector应锟斤拷锟窖撅拷锟斤拷锟斤拷锟睫讹拷锟斤拷锟斤拷锟斤拷
+			//锟斤拷锟絠位锟矫猴拷锟斤拷锟絭ector锟斤拷锟斤拷 -- 锟斤拷锟斤拷锟铰节点，锟斤拷锟矫伙拷锟斤拷锟斤拷锟斤拷氲斤拷锟斤拷锟斤拷vector锟斤拷去
+			//锟斤拷锟絠位锟矫猴拷锟斤拷没锟斤拷vector锟斤拷 -- 锟斤拷锟斤拷锟铰节碉拷
 			if (i == __inner_list.size() - 1 || __inner_list[i + 1].size() == VECTOR_MAX_CAPACITY)
 			{
-				//在i位置的后面多插入一个链表的节点 -- 把i下标的vector的最后一个元素放过去
+				//锟斤拷i位锟矫的猴拷锟斤拷锟斤拷锟斤拷一锟斤拷锟斤拷锟斤拷锟侥节碉拷 -- 锟斤拷i锟铰憋拷锟絭ector锟斤拷锟斤拷锟揭伙拷锟皆拷胤殴锟饺?
 				__inner_list.insert(__inner_list.begin() + i + 1, MyVector<Type>());
 				__nodes_count++;
 				__inner_list[i + 1].push_back(__inner_list[i][VECTOR_MAX_CAPACITY]);
@@ -236,26 +232,26 @@ public:
 			}
 			else
 			{
-				//头插到后面的vector中去
+				//头锟藉到锟斤拷锟斤拷锟絭ector锟斤拷去
 				__inner_list[i + 1].insert(__inner_list[i + 1].begin(),
-					__inner_list[i][VECTOR_MAX_CAPACITY]);//把超出的那个vector的最后一个元素头插到后面的vector中去
-				__inner_list[i].pop_back();//同样，超出的那个vector pop一下
+					__inner_list[i][VECTOR_MAX_CAPACITY]);//锟窖筹拷锟斤拷锟斤拷锟角革拷vector锟斤拷锟斤拷锟揭伙拷锟皆拷锟酵凤拷宓斤拷锟斤拷锟斤拷vector锟斤拷去
+				__inner_list[i].pop_back();//同锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟角革拷vector pop一锟斤拷
 			}
 		}
 		else
 		{
-			size_t res_idx = pos - cur_sum;//剩下的下标
+			size_t res_idx = pos - cur_sum;//剩锟铰碉拷锟铰憋拷
 			__inner_list[i].insert(__inner_list[i].begin() + res_idx, x);
 			__size++;
 		}
 	}
-	//任意位置删除
+	//锟斤拷锟斤拷位锟斤拷删锟斤拷
 	void erase(size_t pos)
 	{
 		assert(pos >= 0 && pos < __size);
 		__size--;
-		//删除下标为pos位置的值
-		//先找到pos是属于哪一个vector的
+		//删锟斤拷锟铰憋拷为pos位锟矫碉拷值
+		//锟斤拷锟揭碉拷pos锟斤拷锟斤拷锟斤拷锟斤拷一锟斤拷vector锟斤拷
 		size_t cur_sum = 0;
 		size_t i = 0;
 		for (i = 0; i < __inner_list.size(); i++)
@@ -263,24 +259,24 @@ public:
 			if (cur_sum + __inner_list[i].size() > pos)break;
 			cur_sum += __inner_list[i].size();
 		}
-		//此时的i就是所找的要删除vector的位置
-		//此时链表中下标为i的位置的vector的size不应该为0，如果为0，说明前面的逻辑出现问题
+		//锟斤拷时锟斤拷i锟斤拷锟斤拷锟斤拷锟揭碉拷要删锟斤拷vector锟斤拷位锟斤拷
+		//锟斤拷时锟斤拷锟斤拷锟斤拷锟铰憋拷为i锟斤拷位锟矫碉拷vector锟斤拷size锟斤拷应锟斤拷为0锟斤拷锟斤拷锟轿?0锟斤拷说锟斤拷前锟斤拷锟斤拷呒锟斤拷锟斤拷锟斤拷锟斤拷锟?
 		assert(__inner_list[i].size());
-		size_t res_idx = pos - cur_sum;//在vector中，目标元素的下标
+		size_t res_idx = pos - cur_sum;//锟斤拷vector锟叫ｏ拷目锟斤拷元锟截碉拷锟铰憋拷
 		__inner_list[i].erase(__inner_list[i].begin() + res_idx);
-		//此时如果下标为i的vector被删空了 -- 此时需要删除一个链表的节点
+		//锟斤拷时锟斤拷锟斤拷卤锟轿猧锟斤拷vector锟斤拷删锟斤拷锟斤拷 -- 锟斤拷时锟斤拷要删锟斤拷一锟斤拷锟斤拷锟斤拷锟侥节碉拷
 		if (__inner_list[i].size() == 0)
 		{
 			__inner_list.erase(__inner_list.begin() + i);
 			__nodes_count--;
 		}
 	}
-	//[]重载
+	//[]锟斤拷锟斤拷
 	Type& operator[](size_t pos)
 	{
 		assert(pos >= 0 && pos < __size);
-		//找到下标为pos位置的值
-		//先找到pos是属于哪一个vector的
+		//锟揭碉拷锟铰憋拷为pos位锟矫碉拷值
+		//锟斤拷锟揭碉拷pos锟斤拷锟斤拷锟斤拷锟斤拷一锟斤拷vector锟斤拷
 		size_t cur_sum = 0;
 		size_t i = 0;
 		for (i = 0; i < __inner_list.size(); i++)
@@ -288,10 +284,10 @@ public:
 			if (cur_sum + __inner_list[i].size() > pos)break;
 			cur_sum += __inner_list[i].size();
 		}
-		size_t res_idx = pos - cur_sum;//在vector中，目标元素的下标
+		size_t res_idx = pos - cur_sum;//锟斤拷vector锟叫ｏ拷目锟斤拷元锟截碉拷锟铰憋拷
 		return __inner_list[i][res_idx];
 	}
-	//查找 -- 查找是必须的 -- 可以配合erase使用 -- 删除第一次出现的x
+	//锟斤拷锟斤拷 -- 锟斤拷锟斤拷锟角憋拷锟斤拷锟? -- 锟斤拷锟斤拷锟斤拷锟絜rase使锟斤拷 -- 删锟斤拷锟斤拷一锟轿筹拷锟街碉拷x
 	size_t find(const Type& x)
 	{
 		for (size_t i = 0; i < __size; i++)
@@ -302,7 +298,7 @@ public:
 			}
 		}
 	}
-	//排序
+	//锟斤拷锟斤拷
 	void sort()
 	{
 		vector<Type>arr;
@@ -317,7 +313,7 @@ public:
 			this->push_back(e);
 		}
 	}
-	//清理
+	//锟斤拷锟斤拷
 	void clear()
 	{
 		__inner_list.clear();
@@ -329,7 +325,7 @@ public:
 		return __size;
 	}
 public:
-	void print() // 展示内部信息
+	void print() // 展示锟节诧拷锟斤拷息
 	{
 		cout << "curent list info: ";
 		this->output(); cout << endl;
@@ -348,7 +344,7 @@ public:
 		cout << "Element Size: " << __size << endl;
 	}
 public:
-	//测试用接口 -- 测试并封装完成之后m可设为私有
+	//锟斤拷锟斤拷锟矫接匡拷 -- 锟斤拷锟皆诧拷锟斤拷装锟斤拷锟街拷锟絤锟斤拷锟斤拷为私锟斤拷
 	void output()
 	{
 		for (size_t i = 0; i < __inner_list.size(); i++)
